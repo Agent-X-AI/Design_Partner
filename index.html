@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vex — Design Partner Program</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg: #121212;
+  --bg-secondary: #1a1a1a;
+  --bg-card: #1e1e1e;
+  --bg-card-hover: #252525;
+  --bg-elevated: #2a2a2a;
+  --bg-muted: #333333;
+  --text-primary: #fafafa;
+  --text-secondary: #a1a1a1;
+  --text-muted: #6b6b6b;
+  --accent: #8b5cf6;
+  --accent-light: #a78bfa;
+  --warm: #d4a574;
+  --warm-dim: rgba(212,165,116,0.6);
+  --border: #262626;
+  --border-light: #333333;
+  --success: #22c55e;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+}
+
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--text-primary);
+  line-height:1.6;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+/* ========== 3D PERSPECTIVE GRID ========== */
+.hero-bg{
+  position:absolute;inset:0;overflow:hidden;
+}
+.hero-bg .grid-3d{
+  position:absolute;inset:0;
+  perspective:1000px;
+  perspective-origin:50% 50%;
+}
+.hero-bg .grid-plane{
+  position:absolute;
+  width:200%;height:200%;left:-50%;top:-20%;
+  transform:rotateX(60deg);
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.07) 1px, transparent 1px);
+  background-size:60px 60px;
+  -webkit-mask-image:radial-gradient(ellipse 80% 50% at 50% 50%, black, transparent);
+  mask-image:radial-gradient(ellipse 80% 50% at 50% 50%, black, transparent);
+}
+.hero-bg .warm-glow{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:800px;height:600px;border-radius:50%;
+  background:rgba(212,165,116,0.06);
+  filter:blur(120px);
+}
+
+/* ========== NAV ========== */
+nav{
+  position:sticky;top:0;z-index:50;
+  background:#121212;
+}
+.nav-inner{
+  max-width:1280px;margin:0 auto;padding:0 24px;
+  display:flex;align-items:center;justify-content:space-between;
+  height:64px;
+}
+.nav-logo{
+  font-size:18px;font-weight:600;
+  color:rgba(250,249,246,0.9);letter-spacing:-0.02em;
+}
+.nav-logo span{color:var(--warm)}
+.nav-links{display:flex;align-items:center;gap:4px}
+.nav-links a{
+  padding:8px 16px;font-size:16px;
+  color:rgba(250,249,246,0.9);text-decoration:none;
+  border-radius:6px;transition:background .2s;
+  letter-spacing:0.001em;line-height:16px;
+}
+.nav-links a:hover{background:rgba(255,255,255,0.06)}
+.nav-cta{
+  padding:10px 20px;font-size:15px;font-weight:500;
+  background:rgb(249,250,245);color:#1a1a1a;
+  border:none;border-radius:4px;text-decoration:none;
+  transition:all .2s;cursor:pointer;
+}
+.nav-cta:hover{transform:scale(1.05)}
+
+/* ========== LAYOUT ========== */
+.container{max-width:1280px;margin:0 auto;padding:0 24px}
+
+/* ========== HERO ========== */
+.hero{
+  position:relative;
+  min-height:calc(100vh - 64px);
+  display:flex;align-items:center;
+  overflow:hidden;
+}
+.hero-content{
+  position:relative;z-index:1;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:48px;align-items:center;
+  width:100%;max-width:1280px;margin:0 auto;padding:0 24px;
+}
+.hero-text{max-width:540px}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 16px;border-radius:99px;margin-bottom:32px;
+  background:rgba(255,255,255,0.1);
+  border:1px solid rgba(255,255,255,0.2);
+  font-size:14px;font-weight:500;color:rgba(255,255,255,0.8);
+  letter-spacing:0.02em;
+}
+.hero-badge::before{
+  content:'';width:8px;height:8px;border-radius:50%;
+  background:var(--warm);
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+h1{
+  font-size:clamp(3rem,5.5vw,6rem);
+  font-weight:500;
+  line-height:0.95;
+  letter-spacing:-0.04em;
+  color:var(--text-primary);
+  margin-bottom:24px;
+}
+.hero-sub{
+  font-size:20px;color:var(--text-secondary);
+  line-height:1.65;margin-bottom:40px;
+}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:14px 24px;font-size:16px;font-weight:500;
+  background:rgb(249,250,245);color:#1a1a1a;
+  border:none;border-radius:4px;
+  text-decoration:none;cursor:pointer;
+  transition:all .2s;font-family:inherit;
+}
+.btn-primary:hover{transform:scale(1.05)}
+.btn-secondary{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:14px 24px;font-size:16px;font-weight:500;
+  background:rgba(255,255,255,0.1);
+  color:rgba(250,249,246,0.9);
+  border:1px solid rgba(255,255,255,0.2);
+  border-radius:4px;text-decoration:none;cursor:pointer;
+  transition:all .2s;font-family:inherit;
+}
+.btn-secondary:hover{background:rgba(255,255,255,0.2)}
+
+/* ========== HERO VISUAL — Mock Dashboard ========== */
+.hero-visual{position:relative}
+.mock-container{
+  position:relative;overflow:hidden;border-radius:8px;
+  border:1px solid rgba(255,255,255,0.1);
+  background:var(--bg-card);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.1),
+    0 25px 50px -12px rgba(0,0,0,0.5),
+    0 0 100px rgba(139,92,246,0.08);
+}
+.mock-header{
+  display:flex;align-items:center;gap:8px;
+  padding:14px 16px;border-bottom:1px solid var(--border);
+}
+.mock-dot{width:10px;height:10px;border-radius:50%;opacity:.5}
+.mock-dot.r{background:#ef4444}
+.mock-dot.y{background:#f59e0b}
+.mock-dot.g{background:#22c55e}
+.mock-tab{
+  margin-left:16px;font-size:12px;font-weight:500;
+  color:var(--text-muted);letter-spacing:0.02em;
+}
+.mock-body{padding:20px}
+.mock-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.stat-card{
+  background:var(--bg-secondary);border:1px solid var(--border);
+  border-radius:10px;padding:16px;
+}
+.stat-label{
+  font-size:11px;color:var(--text-muted);
+  text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;
+}
+.stat-value{font-size:28px;font-weight:600;letter-spacing:-0.02em}
+.stat-value.green{color:var(--success)}
+.stat-value.red{color:var(--danger)}
+.stat-value.purple{color:var(--accent-light)}
+.stat-value.white{color:var(--text-primary)}
+.stat-bar{height:3px;border-radius:2px;background:var(--border-light);margin-top:10px;overflow:hidden}
+.stat-fill{height:100%;border-radius:2px}
+
+.agent-list{display:flex;flex-direction:column;gap:6px}
+.agent-row{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 12px;border-radius:8px;
+  background:var(--bg-secondary);border:1px solid var(--border);
+  font-size:13px;
+}
+.agent-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.agent-name{flex:1;color:var(--text-secondary);font-weight:500;font-family:'SF Mono',Menlo,monospace,sans-serif;font-size:12px}
+.agent-score{font-weight:600;font-size:13px;min-width:36px;text-align:right}
+.agent-badge{
+  font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;
+  padding:3px 10px;border-radius:4px;
+}
+.badge-pass{color:var(--success);background:rgba(34,197,94,0.12)}
+.badge-block{color:var(--danger);background:rgba(239,68,68,0.12)}
+.badge-flag{color:var(--warning);background:rgba(245,158,11,0.12)}
+
+/* ========== SECTION DIVIDER ========== */
+.divider{
+  height:1px;max-width:1280px;margin:0 auto;
+  background:linear-gradient(to right, transparent, var(--border), transparent);
+}
+
+/* ========== PROBLEM SECTION ========== */
+.problem{padding:96px 0}
+.problem-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:80px;margin-bottom:64px;
+}
+.section-label{
+  font-size:20px;font-weight:400;font-style:italic;
+  color:var(--warm);margin-bottom:16px;
+}
+.section-heading{
+  font-size:clamp(2rem,3.5vw,3.5rem);
+  font-weight:500;letter-spacing:-0.03em;
+  line-height:1.1;color:var(--text-primary);
+}
+.section-desc{
+  font-size:18px;color:var(--text-secondary);line-height:1.65;
+}
+
+.stats-row{
+  display:flex;flex-wrap:wrap;gap:16px;
+}
+.stat-pill{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 20px;border-radius:99px;
+  background:rgba(30,30,30,0.8);
+  backdrop-filter:blur(8px);
+  border:1px solid var(--border);
+}
+.stat-pill-icon{font-size:18px}
+.stat-pill-text strong{display:block;font-size:14px;font-weight:500;color:var(--text-primary)}
+.stat-pill-text span{font-size:12px;color:var(--text-muted)}
+
+/* ========== FEATURES / HOW IT WORKS ========== */
+.features{padding:96px 0}
+.features-layout{
+  display:grid;grid-template-columns:1fr 1fr;gap:48px;
+  align-items:start;
+}
+.feature-list{display:flex;flex-direction:column;gap:0}
+.feature-item{
+  padding:20px;border-radius:10px;cursor:pointer;
+  transition:all .3s;opacity:.5;
+}
+.feature-item:hover{opacity:.7}
+.feature-item.active{
+  background:var(--bg-card);opacity:1;
+}
+.feature-num{
+  flex-shrink:0;width:40px;height:40px;border-radius:4px;
+  background:var(--bg-elevated);display:flex;align-items:center;
+  justify-content:center;font-size:15px;color:white;
+  margin-bottom:12px;
+}
+.feature-progress{
+  height:3px;border-radius:2px;overflow:hidden;margin-bottom:16px;
+  background:rgba(255,255,255,0.16);
+}
+.feature-progress-fill{
+  height:100%;background:white;border-radius:2px;
+  transition:width 0.1s linear;
+}
+.feature-item h3{
+  font-size:22px;font-weight:500;line-height:25px;
+  color:rgba(250,249,246,0.9);margin-bottom:8px;
+}
+.feature-item p{
+  font-size:15px;line-height:25px;color:rgba(250,249,246,0.7);
+}
+.feature-visual{
+  position:relative;min-height:520px;border-radius:16px;
+  overflow:hidden;background:var(--bg-card);
+  border:1px solid var(--border);
+}
+.feature-visual-inner{
+  position:absolute;inset:0;display:flex;
+  align-items:center;justify-content:center;padding:24px;
+}
+/* Code block inside the feature visual */
+.code-block{
+  width:100%;background:#0d0d0d;border-radius:10px;
+  border:1px solid var(--border);overflow:hidden;
+  font-family:'SF Mono',Menlo,Consolas,monospace;font-size:13px;
+}
+.code-header{
+  display:flex;align-items:center;gap:8px;
+  padding:12px 16px;border-bottom:1px solid var(--border);
+}
+.code-header span{font-size:12px;color:var(--text-muted)}
+.code-body{padding:16px;line-height:1.8;overflow-x:auto;white-space:pre}
+.code-body .kw{color:#c084fc}
+.code-body .fn{color:#60a5fa}
+.code-body .str{color:#86efac}
+.code-body .cm{color:#525252}
+.code-body .num{color:#fbbf24}
+.code-body .op{color:#a1a1a1}
+
+/* ========== PERKS ========== */
+.perks{padding:96px 0}
+.perks-heading{
+  font-size:clamp(2rem,3.5vw,3.5rem);
+  font-weight:500;letter-spacing:-0.03em;
+  line-height:1.1;margin-bottom:48px;
+}
+.perks-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.perk-card{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:16px;padding:32px;
+  transition:border-color .2s;
+}
+.perk-card:hover{border-color:var(--border-light)}
+.perk-icon{
+  width:40px;height:40px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;margin-bottom:16px;
+  background:rgba(212,165,116,0.08);
+}
+.perk-card h3{
+  font-size:18px;font-weight:500;margin-bottom:6px;
+  color:var(--text-primary);
+}
+.perk-card p{font-size:14px;color:var(--text-secondary);line-height:1.6}
+
+/* ========== FORM ========== */
+.form-section{padding:96px 0}
+.form-wrapper{
+  max-width:640px;margin:0 auto;
+}
+.form-heading{
+  font-size:clamp(2rem,3.5vw,3rem);
+  font-weight:500;letter-spacing:-0.03em;
+  text-align:center;margin-bottom:8px;
+}
+.form-sub{
+  font-size:16px;color:var(--text-secondary);
+  text-align:center;margin-bottom:40px;
+}
+.form-card{
+  background:var(--bg-card)/80;
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border:1px solid var(--border);
+  border-radius:24px;padding:40px;
+}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-row{margin-bottom:20px}
+.form-row label{
+  display:block;font-size:13px;font-weight:500;
+  color:rgba(250,249,246,0.9);margin-bottom:6px;
+}
+.form-row input,
+.form-row select,
+.form-row textarea{
+  width:100%;background:var(--bg);
+  border:1px solid var(--border);border-radius:8px;
+  padding:12px 14px;color:var(--text-primary);font-size:14px;
+  font-family:inherit;transition:border-color .2s;
+}
+.form-row input:focus,
+.form-row select:focus,
+.form-row textarea:focus{
+  outline:none;border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(139,92,246,0.12);
+}
+.form-row input::placeholder,
+.form-row textarea::placeholder{color:var(--text-muted)}
+.form-row textarea{resize:vertical;min-height:90px}
+.form-row select{
+  appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg width='12' height='8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6b6b' stroke-width='2'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;
+  padding-right:36px;
+}
+.submit-btn{
+  width:100%;
+  padding:14px;font-size:16px;font-weight:500;
+  background:rgb(249,250,245);color:#1a1a1a;
+  border:none;border-radius:4px;
+  cursor:pointer;transition:all .2s;
+  font-family:inherit;margin-top:4px;
+}
+.submit-btn:hover{transform:scale(1.02)}
+.form-note{
+  text-align:center;font-size:13px;
+  color:rgba(250,249,246,0.5);margin-top:16px;
+}
+
+/* ========== SUCCESS MESSAGE ========== */
+.success-msg{display:none;text-align:center;padding:64px 24px}
+.success-msg h2{
+  font-size:32px;font-weight:500;margin-bottom:16px;
+  color:var(--success);letter-spacing:-0.02em;
+}
+.success-msg p{color:var(--text-secondary);font-size:16px;line-height:1.7}
+
+/* ========== FOOTER ========== */
+footer{
+  padding:48px 0;
+  background:rgba(15,15,15,0.8);
+  backdrop-filter:blur(20px);
+  border-top:1px solid rgba(255,255,255,0.1);
+}
+.footer-inner{
+  display:flex;justify-content:space-between;align-items:center;
+}
+.footer-left{
+  font-size:14px;color:rgba(250,249,246,0.5);
+}
+.footer-left strong{color:rgba(250,249,246,0.7);font-weight:500}
+.footer-left a{color:rgba(250,249,246,0.5);text-decoration:none;transition:color .2s}
+.footer-left a:hover{color:var(--warm)}
+.footer-right{display:flex;align-items:center;gap:8px}
+.footer-right .dot{width:8px;height:8px;border-radius:50%;background:var(--warm)}
+.footer-right span{font-size:14px;color:rgba(250,249,246,0.5)}
+
+/* ========== ANIMATIONS ========== */
+.fade-up{
+  opacity:0;transform:translateY(20px);
+  animation:fadeUp .6s ease forwards;
+}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+.delay-1{animation-delay:.1s}
+.delay-2{animation-delay:.2s}
+.delay-3{animation-delay:.3s}
+.delay-4{animation-delay:.4s}
+
+/* Observer-based reveal */
+.reveal{opacity:0;transform:translateY(24px);transition:all .6s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ========== RESPONSIVE ========== */
+@media(max-width:1024px){
+  .hero-content{grid-template-columns:1fr;gap:48px}
+  .hero-visual{max-width:560px}
+  .problem-grid{grid-template-columns:1fr;gap:32px}
+  .features-layout{grid-template-columns:1fr}
+  .feature-visual{min-height:400px;margin-top:24px}
+}
+@media(max-width:768px){
+  .nav-links{display:none}
+  .perks-grid{grid-template-columns:1fr}
+  .stats-row{flex-direction:column}
+  .form-grid{grid-template-columns:1fr}
+  .footer-inner{flex-direction:column;gap:16px;text-align:center}
+  h1{font-size:2.5rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo"><span>&#9679;</span> Vex</div>
+    <div class="nav-links">
+      <a href="#how-it-works">How It Works</a>
+      <a href="#program">Program</a>
+      <a href="#apply">Apply</a>
+    </div>
+    <a href="#apply" class="nav-cta">Apply Now</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="grid-3d"><div class="grid-plane"></div></div>
+    <div class="warm-glow"></div>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-text">
+      <div class="hero-badge fade-up">Now Recruiting &mdash; 15 Spots</div>
+      <h1 class="fade-up delay-1">Your agents<br>fail silently.</h1>
+      <p class="hero-sub fade-up delay-2">We're looking for 15 teams running AI agents in production to co-design the reliability layer that should already exist. Free forever for design partners.</p>
+      <div class="fade-up delay-3" style="display:flex;gap:12px;flex-wrap:wrap">
+        <a href="#apply" class="btn-primary">
+          Apply Now
+        </a>
+        <a href="#how-it-works" class="btn-secondary">See how it works</a>
+      </div>
+    </div>
+
+    <div class="hero-visual fade-up delay-4">
+      <div class="mock-container">
+        <div class="mock-header">
+          <div class="mock-dot r"></div>
+          <div class="mock-dot y"></div>
+          <div class="mock-dot g"></div>
+          <span class="mock-tab">Agents &mdash; Live</span>
+        </div>
+        <div class="mock-body">
+          <div class="mock-stats">
+            <div class="stat-card">
+              <div class="stat-label">Success Rate</div>
+              <div class="stat-value green">94.2%</div>
+              <div class="stat-bar"><div class="stat-fill" style="width:94%;background:var(--success)"></div></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Errors Caught</div>
+              <div class="stat-value red">7</div>
+              <div class="stat-bar"><div class="stat-fill" style="width:23%;background:var(--danger)"></div></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Confidence</div>
+              <div class="stat-value purple">0.91</div>
+              <div class="stat-bar"><div class="stat-fill" style="width:91%;background:var(--accent-light)"></div></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Running</div>
+              <div class="stat-value white">34</div>
+              <div class="stat-bar"><div class="stat-fill" style="width:68%;background:var(--text-secondary)"></div></div>
+            </div>
+          </div>
+          <div class="agent-list">
+            <div class="agent-row">
+              <div class="agent-dot" style="background:var(--success)"></div>
+              <div class="agent-name">support-router</div>
+              <div class="agent-score" style="color:var(--success)">0.96</div>
+              <div class="agent-badge badge-pass">PASS</div>
+            </div>
+            <div class="agent-row">
+              <div class="agent-dot" style="background:var(--danger)"></div>
+              <div class="agent-name">data-enrichment</div>
+              <div class="agent-score" style="color:var(--danger)">0.23</div>
+              <div class="agent-badge badge-block">BLOCKED</div>
+            </div>
+            <div class="agent-row">
+              <div class="agent-dot" style="background:var(--warning)"></div>
+              <div class="agent-name">report-generator</div>
+              <div class="agent-score" style="color:var(--warning)">0.71</div>
+              <div class="agent-badge badge-flag">FLAGGED</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROBLEM SECTION -->
+<section class="problem">
+  <div class="container">
+    <div class="problem-grid">
+      <div class="reveal">
+        <p class="section-label">The reliability gap</p>
+        <h2 class="section-heading">Agents break. Nobody notices.</h2>
+      </div>
+      <div class="reveal delay-1" style="padding-top:8px">
+        <p class="section-desc">Every week you ship another agent, the blast radius of a silent failure grows. Hallucinated data, drifted tasks, cascading errors — you find out when a customer complains. We're building the layer that catches it before they do.</p>
+      </div>
+    </div>
+
+    <div class="stats-row reveal delay-2">
+      <div class="stat-pill">
+        <span class="stat-pill-icon">&#9888;&#65039;</span>
+        <div class="stat-pill-text">
+          <strong>88% of orgs</strong>
+          <span>had an agent incident this year</span>
+        </div>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-pill-icon">&#128200;</span>
+        <div class="stat-pill-text">
+          <strong>95% of AI pilots</strong>
+          <span>fail to deliver ROI</span>
+        </div>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-pill-icon">&#9889;</span>
+        <div class="stat-pill-text">
+          <strong>36% success rate</strong>
+          <span>for a 20-step workflow at 95%/step</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FEATURES / HOW IT WORKS -->
+<section class="features" id="how-it-works">
+  <div class="container">
+    <div class="reveal" style="margin-bottom:48px">
+      <p class="section-label">How it works</p>
+      <h2 class="section-heading" style="max-width:640px">Wrap your agents. Watch everything. Catch failures.</h2>
+    </div>
+
+    <div class="features-layout">
+      <div class="feature-list">
+        <div class="feature-item active" data-idx="0">
+          <div class="feature-num">1</div>
+          <div class="feature-progress"><div class="feature-progress-fill" style="width:0%"></div></div>
+          <h3>Wrap in 2 lines of code</h3>
+          <p>Import the SDK. Wrap your agent call. That's it. Works with LangChain, CrewAI, AutoGen, or raw API calls. Zero config, no infrastructure changes.</p>
+        </div>
+        <div class="feature-item" data-idx="1">
+          <div class="feature-num">2</div>
+          <div class="feature-progress"><div class="feature-progress-fill" style="width:0%"></div></div>
+          <h3>Every output gets verified</h3>
+          <p>Confidence scoring (0&#8211;1) on every response. Hallucination detection, schema validation, and task drift monitoring. Know instantly when something's off.</p>
+        </div>
+        <div class="feature-item" data-idx="2">
+          <div class="feature-num">3</div>
+          <div class="feature-progress"><div class="feature-progress-fill" style="width:0%"></div></div>
+          <h3>Bad outputs never reach users</h3>
+          <p>Circuit breakers block low-confidence outputs. Auto-correction re-prompts the agent when it drifts. Cascade prevention stops one failure from taking down your pipeline.</p>
+        </div>
+      </div>
+
+      <div class="feature-visual">
+        <div class="feature-visual-inner" id="feature-display">
+          <!-- SDK code block shown by default -->
+          <div class="code-block" id="code-panel-0">
+            <div class="code-header">
+              <div class="mock-dot r" style="width:8px;height:8px"></div>
+              <div class="mock-dot y" style="width:8px;height:8px"></div>
+              <div class="mock-dot g" style="width:8px;height:8px"></div>
+              <span>agent.py</span>
+            </div>
+            <div class="code-body"><span class="kw">from</span> vex <span class="kw">import</span> Vex
+
+<span class="cm"># Wrap any agent in 2 lines</span>
+v = <span class="fn">Vex</span>(
+  <span class="str">confidence_threshold</span>=<span class="num">0.85</span>,
+  <span class="str">auto_correct</span>=<span class="kw">True</span>
+)
+
+result = v.<span class="fn">run</span>(
+  agent=my_agent,
+  task=<span class="str">"Summarize the Q4 report"</span>
+)
+
+<span class="cm"># result.confidence  → 0.94</span>
+<span class="cm"># result.verified    → True</span>
+<span class="cm"># result.corrections → 0</span></div>
+          </div>
+
+          <div class="code-block" id="code-panel-1" style="display:none">
+            <div class="code-header">
+              <div class="mock-dot r" style="width:8px;height:8px"></div>
+              <div class="mock-dot y" style="width:8px;height:8px"></div>
+              <div class="mock-dot g" style="width:8px;height:8px"></div>
+              <span>verification.log</span>
+            </div>
+            <div class="code-body"><span class="cm">// Real-time verification trace</span>
+
+<span class="fn">[14:32:01]</span> <span class="str">support-router</span>
+  confidence: <span class="num">0.96</span> &#10003;
+  schema:     <span class="str">valid</span>
+  drift:      <span class="num">0.02</span> (within bounds)
+  action:     <span class="kw">PASS</span>
+
+<span class="fn">[14:32:03]</span> <span class="str">data-enrichment</span>
+  confidence: <span class="num">0.23</span> &#10007;
+  schema:     <span class="str">invalid</span> (missing: revenue)
+  drift:      <span class="num">0.78</span> <span class="cm">(CRITICAL)</span>
+  action:     <span style="color:#ef4444">BLOCKED</span> &#8594; alert sent</div>
+          </div>
+
+          <div class="code-block" id="code-panel-2" style="display:none">
+            <div class="code-header">
+              <div class="mock-dot r" style="width:8px;height:8px"></div>
+              <div class="mock-dot y" style="width:8px;height:8px"></div>
+              <div class="mock-dot g" style="width:8px;height:8px"></div>
+              <span>correction.log</span>
+            </div>
+            <div class="code-body"><span class="cm">// Auto-correction in action</span>
+
+<span class="fn">[14:32:05]</span> <span class="str">report-generator</span>
+  confidence: <span class="num">0.71</span> &#9888;
+  issue:      <span style="color:#f59e0b">hallucinated metric</span>
+  action:     <span class="kw">AUTO-CORRECT</span>
+
+  <span class="cm">&#8594; Re-prompting with context...</span>
+  <span class="cm">&#8594; Attempt 2...</span>
+
+  confidence: <span class="num">0.93</span> &#10003;
+  corrections: <span class="num">1</span>
+  action:     <span class="kw">PASS</span>
+
+<span class="fn">[14:32:06]</span> <span style="color:var(--success)">Pipeline healthy.</span>
+  <span class="cm">3 agents verified. 1 corrected. 0 leaked.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PERKS / PROGRAM -->
+<section class="perks" id="program">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">Design partner program</p>
+      <h2 class="perks-heading">Not a beta test.<br>A co-design.</h2>
+    </div>
+    <div class="perks-grid reveal delay-1">
+      <div class="perk-card">
+        <div class="perk-icon">&#8734;</div>
+        <h3>Free forever</h3>
+        <p>Permanent free tier for design partners &mdash; even after public launch. No strings.</p>
+      </div>
+      <div class="perk-card">
+        <div class="perk-icon">&#128101;</div>
+        <h3>Founder access</h3>
+        <p>Weekly calls with the founding team. Your pain shapes our roadmap directly.</p>
+      </div>
+      <div class="perk-card">
+        <div class="perk-icon">&#9889;</div>
+        <h3>Priority features</h3>
+        <p>Your requests go to the top of the backlog. Ship what matters to your agents first.</p>
+      </div>
+      <div class="perk-card">
+        <div class="perk-icon">&#128640;</div>
+        <h3>Competitive edge</h3>
+        <p>Production-grade agent reliability before anyone else in your space has it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- APPLICATION FORM -->
+<section class="form-section" id="apply">
+  <div class="container">
+    <div class="form-wrapper">
+      <h2 class="form-heading reveal">Apply to Join</h2>
+      <p class="form-sub reveal delay-1">Takes 2 minutes. We respond within 48 hours.</p>
+      <div class="form-card reveal delay-2" id="form-card">
+        <form id="partner-form" action="https://formsubmit.co/asingh@oppla.ai" method="POST" onsubmit="handleSubmit(event)">
+          <!-- Formsubmit config -->
+          <input type="hidden" name="_subject" value="New Design Partner Application">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_template" value="table">
+          <input type="text" name="_honey" style="display:none">
+          <div class="form-grid">
+            <div class="form-row">
+              <label>Your Name *</label>
+              <input type="text" name="name" required placeholder="Jane Smith">
+            </div>
+            <div class="form-row">
+              <label>Email *</label>
+              <input type="email" name="email" required placeholder="jane@company.com">
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="form-row">
+              <label>Company</label>
+              <input type="text" name="company" placeholder="Acme Inc">
+            </div>
+            <div class="form-row">
+              <label>Role</label>
+              <input type="text" name="role" placeholder="VP Engineering">
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="form-row">
+              <label>Agents in Production *</label>
+              <select name="agent_count" required>
+                <option value="">Select...</option>
+                <option value="1-5">1 &ndash; 5 agents</option>
+                <option value="6-20">6 &ndash; 20 agents</option>
+                <option value="21-50">21 &ndash; 50 agents</option>
+                <option value="50+">50+ agents</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label>Framework(s)</label>
+              <select name="framework">
+                <option value="">Select...</option>
+                <option value="langchain">LangChain</option>
+                <option value="crewai">CrewAI</option>
+                <option value="autogen">AutoGen</option>
+                <option value="custom">Custom / Raw API</option>
+                <option value="multiple">Multiple</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <label>Biggest agent reliability pain right now *</label>
+            <textarea name="pain" required placeholder="e.g., Our support agent hallucinates product features that don't exist. We find out when customers complain..."></textarea>
+          </div>
+          <div class="form-row">
+            <label>When your agent fails, how long until you find out?</label>
+            <select name="detection_time">
+              <option value="">Select...</option>
+              <option value="realtime">Real-time</option>
+              <option value="minutes">Minutes</option>
+              <option value="hours">Hours</option>
+              <option value="days">Days (or when someone complains)</option>
+              <option value="never">We often never find out</option>
+            </select>
+          </div>
+          <button type="submit" class="submit-btn">Apply for Design Partner Program</button>
+          <p class="form-note">15 spots available &middot; We prioritize teams with agents in production</p>
+        </form>
+        <div class="success-msg" id="success-msg">
+          <h2>You're in.</h2>
+          <p>We'll review your application and get back to you within 48 hours.<br>In the meantime, feel free to reply to our confirmation email with any questions.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <strong>Vex</strong> &middot; By the team behind <strong>Oppla.ai</strong> &amp; <strong>imqa.ai</strong> &middot; <a href="mailto:asingh@oppla.ai">asingh@oppla.ai</a>
+      </div>
+      <div class="footer-right">
+        <div class="dot"></div>
+        <span>Building in public</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ========== INTERSECTION OBSERVER FOR REVEAL ==========
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ========== FEATURE CAROUSEL ==========
+const DURATION = 5000;
+let activeIdx = 0;
+let progress = 0;
+let paused = false;
+const items = document.querySelectorAll('.feature-item');
+const panels = [
+  document.getElementById('code-panel-0'),
+  document.getElementById('code-panel-1'),
+  document.getElementById('code-panel-2')
+];
+
+function setActive(idx) {
+  activeIdx = idx;
+  progress = 0;
+  items.forEach((item, i) => {
+    item.classList.toggle('active', i === idx);
+    item.querySelector('.feature-progress-fill').style.width = '0%';
+  });
+  panels.forEach((p, i) => p.style.display = i === idx ? 'block' : 'none');
+}
+
+items.forEach((item, i) => {
+  item.addEventListener('mouseenter', () => {
+    paused = true;
+    setActive(i);
+  });
+  item.addEventListener('mouseleave', () => {
+    paused = false;
+  });
+});
+
+setInterval(() => {
+  if (paused) return;
+  progress += 100 / (DURATION / 50);
+  if (progress >= 100) {
+    setActive((activeIdx + 1) % items.length);
+  } else {
+    items[activeIdx].querySelector('.feature-progress-fill').style.width = progress + '%';
+  }
+}, 50);
+
+// ========== FORM SUBMISSION ==========
+function handleSubmit(e) {
+  e.preventDefault();
+  const form = document.getElementById('partner-form');
+  const data = new FormData(form);
+  const btn = form.querySelector('.submit-btn');
+  btn.textContent = 'Submitting...';
+  btn.disabled = true;
+
+  fetch(form.action, {
+    method: 'POST',
+    body: data,
+    headers: { 'Accept': 'application/json' }
+  })
+  .then(res => {
+    form.style.display = 'none';
+    document.getElementById('success-msg').style.display = 'block';
+  })
+  .catch(() => {
+    form.style.display = 'none';
+    document.getElementById('success-msg').style.display = 'block';
+  });
+}
+</script>
+</body>
+</html>
