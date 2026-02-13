@@ -361,37 +361,48 @@ h1{
   display:grid;grid-template-columns:1fr 1fr;gap:48px;
   align-items:start;
 }
-.layer-stack{display:flex;flex-direction:column;gap:16px}
-.layer-card{
-  background:var(--bg-card);border:1px solid var(--border);
-  border-radius:12px;padding:28px;
-  transition:border-color .3s;cursor:pointer;
-  position:relative;overflow:hidden;
+.feature-list{display:flex;flex-direction:column;gap:0}
+.feature-item{
+  padding:20px;border-radius:10px;cursor:pointer;
+  transition:all .3s;opacity:.5;
 }
-.layer-card::before{
-  content:'';position:absolute;top:0;left:0;
-  width:4px;height:100%;border-radius:4px 0 0 4px;
+.feature-item:hover{opacity:.7}
+.feature-item.active{
+  background:var(--bg-card);opacity:1;
 }
-.layer-card[data-layer="1"]::before{background:var(--accent-light)}
-.layer-card[data-layer="2"]::before{background:var(--warning)}
-.layer-card[data-layer="3"]::before{background:var(--success)}
-.layer-card.active{border-color:var(--border-light);background:var(--bg-card-hover)}
-.layer-num{
-  display:inline-flex;align-items:center;justify-content:center;
-  width:28px;height:28px;border-radius:6px;
-  font-size:13px;font-weight:600;margin-bottom:12px;
+.feature-num{
+  flex-shrink:0;width:40px;height:40px;border-radius:4px;
+  background:var(--bg-elevated);display:flex;align-items:center;
+  justify-content:center;font-size:15px;color:white;
+  margin-bottom:12px;
 }
-.layer-card[data-layer="1"] .layer-num{background:rgba(167,139,250,0.15);color:var(--accent-light)}
-.layer-card[data-layer="2"] .layer-num{background:rgba(245,158,11,0.15);color:var(--warning)}
-.layer-card[data-layer="3"] .layer-num{background:rgba(34,197,94,0.15);color:var(--success)}
-.layer-card h3{
-  font-size:18px;font-weight:500;margin-bottom:6px;
-  color:var(--text-primary);
+.feature-progress{
+  height:3px;border-radius:2px;overflow:hidden;margin-bottom:16px;
+  background:rgba(255,255,255,0.16);
 }
-.layer-card p{font-size:14px;color:var(--text-secondary);line-height:1.7}
-.layer-result{
+.feature-progress-fill{
+  height:100%;background:white;border-radius:2px;
+  transition:width 0.1s linear;
+}
+.feature-item h3{
+  font-size:22px;font-weight:500;line-height:25px;
+  color:rgba(250,249,246,0.9);margin-bottom:8px;
+}
+.feature-item p{
+  font-size:15px;line-height:25px;color:rgba(250,249,246,0.7);
+}
+.feature-result{
   margin-top:10px;font-size:13px;font-weight:500;
   color:var(--warm);
+}
+.feature-visual{
+  position:relative;min-height:520px;border-radius:16px;
+  overflow:hidden;background:var(--bg-card);
+  border:1px solid var(--border);
+}
+.feature-visual-inner{
+  position:absolute;inset:0;display:flex;
+  align-items:center;justify-content:center;padding:24px;
 }
 
 /* Code block */
@@ -399,13 +410,12 @@ h1{
   width:100%;background:#0d0d0d;border-radius:10px;
   border:1px solid var(--border);overflow:hidden;
   font-family:'SF Mono',Menlo,Consolas,monospace;font-size:13px;
-  position:sticky;top:96px;
 }
 .code-header{
   display:flex;align-items:center;gap:8px;
   padding:12px 16px;border-bottom:1px solid var(--border);
 }
-.code-dot{width:8px;height:8px;border-radius:50%;opacity:.5}
+.code-header .code-dot{width:8px;height:8px;border-radius:50%;opacity:.5}
 .code-dot.r{background:#ef4444}
 .code-dot.y{background:#f59e0b}
 .code-dot.g{background:#22c55e}
@@ -667,7 +677,7 @@ footer{
   .cost-grid{grid-template-columns:1fr}
   .value-grid{grid-template-columns:1fr}
   .layers-layout{grid-template-columns:1fr}
-  .code-block{position:static;margin-top:24px}
+  .feature-visual{min-height:400px;margin-top:24px}
   .scenario{grid-template-columns:1fr}
   .scenario-heading{grid-column:span 1}
   .partner-columns{grid-template-columns:1fr}
@@ -880,65 +890,113 @@ footer{
 <!-- ========== THREE LAYERS (Technical) ========== -->
 <section class="layers" id="how-it-works">
   <div class="container">
-    <div class="reveal">
+    <div class="reveal" style="margin-bottom:48px">
       <p class="section-label">How it works</p>
       <h2 class="layers-heading">Three Layers of Reliability</h2>
       <p class="layers-sub">Each layer builds on the last. Together, they turn your agents from unpredictable to production-grade.</p>
     </div>
 
     <div class="layers-layout">
-      <div class="layer-stack reveal delay-1">
-        <!-- Layer 1 -->
-        <div class="layer-card active" data-layer="1" data-idx="0">
-          <div class="layer-num">1</div>
+      <div class="feature-list">
+        <div class="feature-item active" data-idx="0">
+          <div class="feature-num">1</div>
+          <div class="feature-progress"><div class="feature-progress-fill" style="width:0%"></div></div>
           <h3>Observation</h3>
           <p>Vex watches every interaction your agent has. Tool calls, API responses, user messages &mdash; everything is logged. As it logs, Vex continuously checks: Is the agent still on task? Is it hallucinating? Is it about to fail?</p>
-          <div class="layer-result">Result: Drift detected in milliseconds, not days.</div>
+          <div class="feature-result">Result: Drift detected in milliseconds, not days.</div>
         </div>
-
-        <!-- Layer 2 -->
-        <div class="layer-card" data-layer="2" data-idx="1">
-          <div class="layer-num">2</div>
+        <div class="feature-item" data-idx="1">
+          <div class="feature-num">2</div>
+          <div class="feature-progress"><div class="feature-progress-fill" style="width:0%"></div></div>
           <h3>Correction Engine</h3>
           <p>If Layer 1 detects a problem, Layer 2 acts. Output is blocked before users see it. The agent is re-prompted with context: &ldquo;You started to drift. Here's what you should do instead.&rdquo; If that's not enough, a correction prompt is injected directly.</p>
-          <div class="layer-result">Result: Failures fixed mid-flight. Zero downtime.</div>
+          <div class="feature-result">Result: Failures fixed mid-flight. Zero downtime.</div>
         </div>
-
-        <!-- Layer 3 -->
-        <div class="layer-card" data-layer="3" data-idx="2">
-          <div class="layer-num">3</div>
+        <div class="feature-item" data-idx="2">
+          <div class="feature-num">3</div>
+          <div class="feature-progress"><div class="feature-progress-fill" style="width:0%"></div></div>
           <h3>System Prompt Regeneration</h3>
           <p>If Layers 1 &amp; 2 catch the same failure repeatedly, Vex analyzes the pattern. It rebuilds the system prompt for that specific agent to prevent future deviation.</p>
-          <div class="layer-result">Result: Reliability increases as you scale, not decreases.</div>
+          <div class="feature-result">Result: Reliability increases as you scale, not decreases.</div>
         </div>
       </div>
 
-      <div class="reveal delay-2">
-        <div class="code-block">
-          <div class="code-header">
-            <div class="code-dot r"></div>
-            <div class="code-dot y"></div>
-            <div class="code-dot g"></div>
-            <span>agent.py</span>
-          </div>
-          <div class="code-body"><span class="kw">from</span> vex <span class="kw">import</span> Vex
+      <div class="feature-visual">
+        <div class="feature-visual-inner" id="feature-display">
+          <!-- Panel 1: SDK code -->
+          <div class="code-block" id="code-panel-0">
+            <div class="code-header">
+              <div class="code-dot r"></div>
+              <div class="code-dot y"></div>
+              <div class="code-dot g"></div>
+              <span>agent.py</span>
+            </div>
+            <div class="code-body"><span class="kw">from</span> vex <span class="kw">import</span> Vex
 
 <span class="cm"># Wrap any agent in 2 lines</span>
 vex = <span class="fn">Vex</span>(
-  <span class="str">observation</span>=<span class="kw">True</span>,        <span class="cm"># Layer 1: See what agent does</span>
-  <span class="str">auto_correct</span>=<span class="kw">True</span>,       <span class="cm"># Layer 2: Fix in flight</span>
-  <span class="str">learn_continuously</span>=<span class="kw">True</span> <span class="cm"># Layer 3: Improve over time</span>
+  <span class="str">observation</span>=<span class="kw">True</span>,
+  <span class="str">auto_correct</span>=<span class="kw">True</span>,
+  <span class="str">learn_continuously</span>=<span class="kw">True</span>
 )
 
 result = vex.<span class="fn">wrap</span>(my_agent).<span class="fn">run</span>(
   task=<span class="str">"Generate Q4 report"</span>
 )
 
-<span class="cm"># What you get:</span>
-result.<span class="str">confidence</span>      <span class="cm"># 0-1 score</span>
-result.<span class="str">verified</span>        <span class="cm"># True/False</span>
-result.<span class="str">corrections</span>     <span class="cm"># How many auto-fixes</span>
-result.<span class="str">audit_log</span>       <span class="cm"># Full trace of what happened</span></div>
+<span class="cm"># result.confidence  → 0.94</span>
+<span class="cm"># result.verified    → True</span>
+<span class="cm"># result.corrections → 0</span></div>
+          </div>
+
+          <!-- Panel 2: Observation log -->
+          <div class="code-block" id="code-panel-1" style="display:none">
+            <div class="code-header">
+              <div class="code-dot r"></div>
+              <div class="code-dot y"></div>
+              <div class="code-dot g"></div>
+              <span>observation.log</span>
+            </div>
+            <div class="code-body"><span class="cm">// Real-time observation trace</span>
+
+<span class="fn">[14:32:01]</span> <span class="str">support-router</span>
+  confidence: <span class="num">0.96</span> &#10003;
+  schema:     <span class="str">valid</span>
+  drift:      <span class="num">0.02</span> (within bounds)
+  action:     <span class="kw">PASS</span>
+
+<span class="fn">[14:32:03]</span> <span class="str">data-enrichment</span>
+  confidence: <span class="num">0.23</span> &#10007;
+  schema:     <span class="str">invalid</span> (missing: revenue)
+  drift:      <span class="num">0.78</span> <span class="cm">(CRITICAL)</span>
+  action:     <span style="color:#ef4444">BLOCKED</span> &#8594; correction triggered</div>
+          </div>
+
+          <!-- Panel 3: Correction log -->
+          <div class="code-block" id="code-panel-2" style="display:none">
+            <div class="code-header">
+              <div class="code-dot r"></div>
+              <div class="code-dot y"></div>
+              <div class="code-dot g"></div>
+              <span>correction.log</span>
+            </div>
+            <div class="code-body"><span class="cm">// Auto-correction + prompt regen</span>
+
+<span class="fn">[14:32:05]</span> <span class="str">report-generator</span>
+  confidence: <span class="num">0.71</span> &#9888;
+  issue:      <span style="color:#f59e0b">hallucinated metric</span>
+  action:     <span class="kw">AUTO-CORRECT</span>
+
+  <span class="cm">&#8594; Re-prompting with context...</span>
+  <span class="cm">&#8594; Attempt 2...</span>
+
+  confidence: <span class="num">0.93</span> &#10003;
+  corrections: <span class="num">1</span>
+  action:     <span class="kw">PASS</span>
+
+<span class="fn">[14:32:06]</span> <span style="color:var(--success)">System prompt rebuilt.</span>
+  <span class="cm">Pattern detected → prompt updated → future drift prevented</span></div>
+          </div>
         </div>
       </div>
     </div>
@@ -1319,14 +1377,47 @@ const observer = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-// ========== LAYER CARD INTERACTIVITY ==========
-const layerCards = document.querySelectorAll('.layer-card');
-layerCards.forEach(card => {
-  card.addEventListener('mouseenter', () => {
-    layerCards.forEach(c => c.classList.remove('active'));
-    card.classList.add('active');
+// ========== FEATURE CAROUSEL ==========
+const DURATION = 5000;
+let activeIdx = 0;
+let progress = 0;
+let paused = false;
+const items = document.querySelectorAll('.feature-item');
+const panels = [
+  document.getElementById('code-panel-0'),
+  document.getElementById('code-panel-1'),
+  document.getElementById('code-panel-2')
+];
+
+function setActive(idx) {
+  activeIdx = idx;
+  progress = 0;
+  items.forEach((item, i) => {
+    item.classList.toggle('active', i === idx);
+    item.querySelector('.feature-progress-fill').style.width = '0%';
+  });
+  panels.forEach((p, i) => p.style.display = i === idx ? 'block' : 'none');
+}
+
+items.forEach((item, i) => {
+  item.addEventListener('mouseenter', () => {
+    paused = true;
+    setActive(i);
+  });
+  item.addEventListener('mouseleave', () => {
+    paused = false;
   });
 });
+
+setInterval(() => {
+  if (paused) return;
+  progress += 100 / (DURATION / 50);
+  if (progress >= 100) {
+    setActive((activeIdx + 1) % items.length);
+  } else {
+    items[activeIdx].querySelector('.feature-progress-fill').style.width = progress + '%';
+  }
+}, 50);
 
 // ========== FORM SUBMISSION ==========
 function handleSubmit(e) {
